@@ -1,4 +1,5 @@
 import axios from 'axios';
+const API_URL = import.meta.env.VITE_BASE_URI;
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_BASE_URI,
@@ -41,3 +42,24 @@ export const tasksApi = {
     await api.delete(`/tasks/${id}`);
   },
 };
+
+//login
+export async function loginApi(payload) {
+  const response = await fetch(`${API_URL}login`, {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+    
+});
+if (!response.ok) {
+   
+    throw new Error(response.message);
+  }
+
+  const data = await response.json();
+
+  return data;
+
+}

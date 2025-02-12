@@ -15,9 +15,10 @@ export function useLogin() {
     mutationFn: loginApi,
     onSuccess: (data) => {
       queryClient.setQueryData(['user'], data.user);
-      queryClient.setQueryData(['session'], data.authorisation);
+      
       setItemToLocalStorage('token', data.authorisation.token);
-      navigate('/', { replace: true });
+
+      navigate('/dashboard', { replace: true });
       
     },
     onError: (err) => {

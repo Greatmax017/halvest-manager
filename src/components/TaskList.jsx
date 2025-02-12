@@ -11,17 +11,24 @@ import {
   AlertCircle,
   Loader2,
 } from 'lucide-react';
+import { useGetTasks } from '../hooks/useGetTask';
 
 const TaskList = () => {
   const [status, setStatus] = useState('');
   const [search, setSearch] = useState('');
   const { tasks } = useTasks(status);
 
+  // const { tasks, isLoading } = useGetTasks();
+
+  // if (isLoading) return <div>Loading...</div>;
+
+
   const filteredTasks = tasks.data?.filter(task =>
     task.title.toLowerCase().includes(search.toLowerCase()) ||
     task.description?.toLowerCase().includes(search.toLowerCase())
   );
 
+  
   const statusCounts = tasks.data?.reduce((acc, task) => {
     acc[task.status] = (acc[task.status] || 0) + 1;
     return acc;

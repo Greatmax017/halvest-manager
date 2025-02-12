@@ -157,13 +157,12 @@ export const authApi = {
         throw new Error(error.message || 'Logout failed');
       }
     } finally {
-      // Always clear local storage even if API call fails
+   
       localStorage.removeItem('token');
       localStorage.removeItem('user');
     }
   },
 
-  // Helper functions remain the same
   isAuthenticated: () => {
     const token = localStorage.getItem('token');
     return !!token;

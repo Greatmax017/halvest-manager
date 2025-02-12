@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
-import { authApi } from '../api/auth';
-import { useAuth } from '../context/AuthContext';
+import { useSignup } from '../hooks/useSignup';
+
+
 
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -19,11 +20,13 @@ const validationSchema = Yup.object({
     .required('Password confirmation is required'),
 });
 
+
+
 const Register = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
   const [error, setError] = useState('');
 
+  const { signup, isLoading } = useSignup();
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -33,13 +36,18 @@ const Register = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      try {
-        const response = await authApi.register(values);
-        login(response.user, response.token);
-        navigate('/');
-      } catch (err) {
-        setError(err.response?.data?.message || 'An error occurred during registration');
-      }
+
+        const payload = {
+            first_name: values.name,
+            last_name: values.name,
+            email: values.email,
+            password: values.password,
+            password_confirmation: values.password_confirmation,
+            country: "NG",
+            };
+            
+          
+            signup(payload);
     },
   });
 
@@ -126,10 +134,10 @@ const Register = () => {
           <div>
             <button
               type="submit"
-              disabled={formik.isSubmitting}
+              disabled={isLoading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
-              {formik.isSubmitting ? 'Creating account...' : 'Create account'}
+              {isLoading ? 'Creating account...' : 'Create account'}
             </button>
           </div>
 

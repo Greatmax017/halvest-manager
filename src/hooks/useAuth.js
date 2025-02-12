@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 
-import { loginApi } from '../api/apiService';
+import { loginApi, signupapi } from '../api/apiService';
 import { setItemToLocalStorage } from '../utils/helper';
 
 export function useLogin() {
@@ -12,11 +12,10 @@ export function useLogin() {
 
   const { mutate: login, isPending: isLoading } = useMutation({
     
-    mutationFn: ({ email, password }) => loginApi({ email, password }),
+    mutationFn: loginApi,
     onSuccess: (data) => {
       queryClient.setQueryData(['user'], data.user);
       queryClient.setQueryData(['session'], data.authorisation);
-      queryClient.setQueryData(['stats'], data.stats);
       setItemToLocalStorage('token', data.authorisation.token);
       navigate('/', { replace: true });
       
@@ -28,3 +27,7 @@ export function useLogin() {
 
   return { login, isLoading };
 }
+
+
+
+
